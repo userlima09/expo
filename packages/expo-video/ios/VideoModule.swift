@@ -6,15 +6,19 @@ public final class VideoModule: Module {
   public func definition() -> ModuleDefinition {
     Name("ExpoVideo")
 
-    OnCreate {
-      VideoCacheManager.shared.removeUnusedCache()
-    }
-
     Function("isPictureInPictureSupported") { () -> Bool in
       if #available(iOS 13.4, tvOS 14.0, *) {
         return AVPictureInPictureController.isPictureInPictureSupported()
       }
       return false
+    }
+
+    Function("cleanVideoCache") {
+      return VideoCacheManager.shared.cleanCache()
+    }
+
+    Function("cleanAllVideoCache") {
+      return VideoCacheManager.shared.cleanAllCache()
     }
 
     View(VideoView.self) {
