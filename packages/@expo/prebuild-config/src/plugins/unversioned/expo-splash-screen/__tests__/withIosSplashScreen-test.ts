@@ -112,9 +112,6 @@ describe(withIosSplashScreen, () => {
     config = await compileModsAsync(config, { projectRoot, platforms: ['ios', 'android'] });
 
     // Test Results
-
-    console.log({ config });
-
     expect(config).toBeDefined();
 
     const infoPlist = await readPlistAsync('/app/ios/HelloWorld/Info.plist');
