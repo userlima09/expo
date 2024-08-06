@@ -3,7 +3,7 @@ import type { VideoViewProps } from './VideoView.types';
 /**
  * Returns whether the current device supports Picture in Picture (PiP) mode.
  *
- * > **Note:** All major web browsers, except Firefox, support Picture in Picture (PiP) mode.
+ * > **Note:** All major web browsers support Picture in Picture (PiP) mode except Firefox.
  * > For more information, see [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/API/Picture-in-Picture_API#browser_compatibility).
  * @returns A `boolean` which is `true` if the device supports PiP mode, and `false` otherwise.
  */
@@ -13,11 +13,11 @@ export declare class VideoView extends PureComponent<VideoViewProps> {
     /**
      * Enters fullscreen mode.
      */
-    enterFullscreen(): void;
+    enterFullscreen(): Promise<any>;
     /**
      * Exits fullscreen mode.
      */
-    exitFullscreen(): void;
+    exitFullscreen(): Promise<any>;
     /**
      * Enters Picture in Picture (PiP) mode. Throws an exception if the device does not support PiP.
      * > **Note:** Only one player can be in Picture in Picture (PiP) mode at a time.
@@ -28,14 +28,14 @@ export declare class VideoView extends PureComponent<VideoViewProps> {
      * @platform ios 14+
      * @platform web
      */
-    startPictureInPicture(): void;
+    startPictureInPicture(): Promise<void>;
     /**
      * Exits Picture in Picture (PiP) mode.
      * @platform android
      * @platform ios 14+
      * @platform web
      */
-    stopPictureInPicture(): void;
+    stopPictureInPicture(): Promise<void>;
     render(): ReactNode;
 }
 //# sourceMappingURL=VideoView.d.ts.map
