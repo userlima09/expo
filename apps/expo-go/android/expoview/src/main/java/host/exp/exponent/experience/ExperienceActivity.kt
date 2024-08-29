@@ -497,7 +497,7 @@ open class ExperienceActivity : BaseExperienceActivity(), StartReactInstanceDele
       notificationObject = options.notificationObject
     }
 
-    BranchManager.handleLink(this, intentUri, detachSdkVersion)
+    BranchManager.handleLink(this, intentUri)
 
     ExperienceRTLManager.setRTLPreferencesFromManifest(this, manifest)
 
@@ -588,7 +588,7 @@ open class ExperienceActivity : BaseExperienceActivity(), StartReactInstanceDele
         reactInstanceManager.callRecursive("getCurrentReactContext")!!
           .callRecursive("getJSModule", rctDeviceEventEmitter.rnClass())!!
           .call("emit", "Exponent.openUri", uri)
-        BranchManager.handleLink(this, uri, detachSdkVersion)
+        BranchManager.handleLink(this, uri)
       }
       if ((options.notification != null || options.notificationObject != null) && detachSdkVersion != null) {
         val rctDeviceEventEmitter =
