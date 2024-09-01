@@ -7,6 +7,8 @@ import { createContext } from './utils/context';
 import { getAnonymousId } from '../../api/user/UserSettings';
 import { env } from '../env';
 
+const debug = require('debug')('expo:telemetry') as typeof console.log;
+
 type TelemetryOptions = {
   /** A locally generated ID, untracable to an actual user */
   anonymousId?: string;
@@ -40,39 +42,42 @@ export class Telemetry {
     // Abort when debugging the telemetry
     if (env.EXPO_NO_TELEMETRY_DETACH && strategy !== 'debug') return;
 
+    debug('Switching strategy from %s to %s', this.client.strategy, strategy);
+
     // Load and instantiate the correct client, based on strategy
     const client = createClientFromStrategy(strategy);
     // Replace the client, and re-record any pending records
     this.client.abort().forEach((record) => client.record([record]));
     this.client = client;
 
-    console.log('CHANGED TELEMETRY TO', strategy);
+    return this;
   }
 
   record(record: TelemetryRecord | TelemetryRecord[]) {
-    console.log('RECORDING EVENT', record);
-    return this.client.record(
-      (Array.isArray(record) ? record : [record]).map((record) => ({
-        type: 'track',
-        ...record,
-        sentAt: new Date(),
-        messageId: createMessageId(record),
-        anonymousId: this.actor.anonymousId,
-        context: {
-          ...this.context,
-          sessionId: this.actor.sessionId,
-          client: { mode: this.client.strategy },
-        },
-      }))
-    );
+    const records = (Array.isArray(record) ? record : [record]).map((record) => ({
+      type: 'track' as const,
+      ...record,
+      sentAt: new Date(),
+      messageId: createMessageId(record),
+      anonymousId: this.actor.anonymousId,
+      context: {
+        ...this.context,
+        sessionId: this.actor.sessionId,
+        client: { mode: this.client.strategy },
+      },
+    }));
+
+    debug('Recording %d event(s)', records.length);
+
+    return this.client.record(records);
   }
 
   flush() {
+    debug('Flushing events...');
     return this.client.flush();
   }
 
   flushOnExit() {
-    // When flushing, always switch to the detached client
     this.setStrategy('detached');
     return this.client.flush();
   }

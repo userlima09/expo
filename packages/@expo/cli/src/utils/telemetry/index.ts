@@ -3,7 +3,6 @@ import process from 'node:process';
 import type { Telemetry } from './Telemetry';
 import type { TelemetryRecord } from './types';
 import { env } from '../env';
-import { installExitHooks } from '../exit';
 
 /** The singleton telemetry manager to use */
 let telemetry: Telemetry | null = null;
@@ -17,8 +16,9 @@ export function getTelemetry(): Telemetry | null {
     telemetry = new Telemetry();
 
     // Flush any pending events on exit
-    installExitHooks(() => telemetry!.flushOnExit());
-    process.on('beforeExit', () => telemetry?.flushOnExit());
+    process.once('SIGINT', () => telemetry?.flushOnExit());
+    process.once('SIGTERM', () => telemetry?.flushOnExit());
+    process.once('beforeExit', () => telemetry?.flushOnExit());
   }
 
   return telemetry;
@@ -40,7 +40,7 @@ export function recordEvent(records: TelemetryRecord | TelemetryRecord[]) {
  * This changes the telemetry strategy for long running commands.
  */
 export function recordCommandEvent(command: string) {
-  if (isLongRunningCommand(command)) {
+  if (isLongRunningCommand(command.toLowerCase())) {
     getTelemetry()?.setStrategy('instant');
   }
 
