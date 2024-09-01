@@ -1,7 +1,8 @@
 import { Buffer } from 'node:buffer';
 import { URL } from 'node:url';
-import { Agent, RetryAgent } from 'undici';
+import { Agent, RetryAgent, type RequestInfo, type RequestInit } from 'undici';
 
+import { fetch } from '../../../utils/fetch';
 import { TelemetryClient, TelemetryClientStrategy, TelemetryRecordInternal } from '../types';
 import { TELEMETRY_ENDPOINT, TELEMETRY_TARGET } from '../utils/constants';
 
@@ -114,11 +115,7 @@ function createTelemetryFetch(): typeof fetch {
   });
 
   return (info: RequestInfo | URL, init: RequestInit = {}) =>
-    fetch(extractUrl(info), {
-      ...init,
-      // @ts-expect-error
-      dispatcher: agent,
-    });
+    fetch(extractUrl(info), { ...init, dispatcher: agent });
 }
 
 /** Extract the URL string from either `RequestInfo` or `URL` */
