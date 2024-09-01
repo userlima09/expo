@@ -45,9 +45,12 @@ export class Telemetry {
     // Replace the client, and re-record any pending records
     this.client.abort().forEach((record) => client.record([record]));
     this.client = client;
+
+    console.log('CHANGED TELEMETRY TO', strategy);
   }
 
   record(record: TelemetryRecord | TelemetryRecord[]) {
+    console.log('RECORDING EVENT', record);
     return this.client.record(
       (Array.isArray(record) ? record : [record]).map((record) => ({
         type: 'track',

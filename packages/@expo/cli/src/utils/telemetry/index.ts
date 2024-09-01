@@ -1,6 +1,9 @@
+import process from 'node:process';
+
 import type { Telemetry } from './Telemetry';
 import type { TelemetryRecord } from './types';
 import { env } from '../env';
+import { installExitHooks } from '../exit';
 
 /** The singleton telemetry manager to use */
 let telemetry: Telemetry | null = null;
@@ -13,9 +16,9 @@ export function getTelemetry(): Telemetry | null {
     const { Telemetry } = require('./Telemetry') as typeof import('./Telemetry');
     telemetry = new Telemetry();
 
-    process.once('SIGINT', () => telemetry!.flushOnExit());
-    process.once('SIGTERM', () => telemetry!.flushOnExit());
-    process.once('beforeExit', () => telemetry!.flushOnExit());
+    // Flush any pending events on exit
+    installExitHooks(() => telemetry!.flushOnExit());
+    process.on('beforeExit', () => telemetry?.flushOnExit());
   }
 
   return telemetry;
