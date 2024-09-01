@@ -18,7 +18,7 @@ import { installExitHooks } from '../utils/exit';
 import { isInteractive } from '../utils/interactive';
 import { setNodeEnv } from '../utils/nodeEnv';
 import { profile } from '../utils/profile';
-import { recordEvent } from '../utils/telemetry';
+import { record } from '../utils/telemetry';
 
 async function getMultiBundlerStartOptions(
   projectRoot: string,
@@ -151,7 +151,7 @@ export async function startAsync(
 }
 
 async function trackAsync(projectRoot: string, exp: ExpoConfig): Promise<void> {
-  recordEvent({
+  record({
     event: 'dev client start command',
     properties: {
       status: 'started',
@@ -159,7 +159,7 @@ async function trackAsync(projectRoot: string, exp: ExpoConfig): Promise<void> {
     },
   });
   installExitHooks(async () => {
-    recordEvent({
+    record({
       event: 'dev client start command',
       properties: {
         status: 'finished',

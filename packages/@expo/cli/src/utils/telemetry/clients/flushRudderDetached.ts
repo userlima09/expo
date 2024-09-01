@@ -25,7 +25,7 @@ async function flush() {
 
   if (data.records.length) {
     const client = new RudderClient();
-    client.record(data.records);
+    await client.record(data.records);
     await client.flush();
   }
 

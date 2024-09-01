@@ -24,11 +24,7 @@ export class RudderClient implements TelemetryClient {
   }
 
   async record(records: TelemetryRecordInternal[]) {
-    await Promise.all(
-      records.map((record) => {
-        return this.rudderstack.track(record);
-      })
-    );
+    await Promise.all(records.map((record) => this.rudderstack.track(record)));
   }
 
   async flush() {

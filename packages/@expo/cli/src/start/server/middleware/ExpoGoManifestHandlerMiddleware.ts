@@ -16,7 +16,7 @@ import {
   signManifestString,
 } from '../../../utils/codesigning';
 import { CommandError } from '../../../utils/errors';
-import { recordEvent } from '../../../utils/telemetry';
+import { record } from '../../../utils/telemetry';
 import { stripPort } from '../../../utils/url';
 
 const debug = require('debug')('expo:start:server:middleware:ExpoGoManifestHandlerMiddleware');
@@ -249,7 +249,7 @@ export class ExpoGoManifestHandlerMiddleware extends ManifestMiddleware<ExpoGoMa
   }
 
   protected trackManifest(version?: string) {
-    recordEvent({
+    record({
       event: 'Serve Expo Updates Manifest',
       properties: {
         runtimeVersion: version,

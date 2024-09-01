@@ -41,7 +41,7 @@ export class FetchClient implements TelemetryClient {
     this.headers = {
       accept: 'application/json',
       'content-type': 'application/json',
-      'user-agent': `expo-cli-fetch-client/${process.env.__EXPO_VERSION}`,
+      'user-agent': `expo-cli/${process.env.__EXPO_VERSION}`,
       authorization: 'Basic ' + Buffer.from(`${target}:`).toString('base64'),
     };
   }
@@ -105,20 +105,13 @@ export class FetchClient implements TelemetryClient {
 }
 
 function createTelemetryFetch(): typeof fetch {
-  const agent = new RetryAgent(
-    new Agent({
-      connectTimeout: 5000,
-      headersTimeout: 5000,
-      bodyTimeout: 5000,
-    }),
-    {
-      maxRetries: 3,
-      retryAfter: true,
-      minTimeout: 500,
-      maxTimeout: 2000,
-      timeoutFactor: 2,
-    }
-  );
+  const agent = new RetryAgent(new Agent(), {
+    maxRetries: 3,
+    retryAfter: true,
+    minTimeout: 500,
+    maxTimeout: 2000,
+    timeoutFactor: 2,
+  });
 
   return (info: RequestInfo | URL, init: RequestInit = {}) =>
     fetch(extractUrl(info), {

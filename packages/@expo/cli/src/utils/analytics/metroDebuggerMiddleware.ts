@@ -3,7 +3,7 @@ import { Middleware } from 'metro-config';
 
 import { DebugTool, getMetroDebugProperties } from './getMetroDebugProperties';
 import { env } from '../env';
-import { recordEvent } from '../telemetry';
+import { record } from '../telemetry';
 
 type Request = Parameters<Middleware>[0];
 type Response = Parameters<Middleware>[1];
@@ -37,7 +37,7 @@ export function createDebuggerTelemetryMiddleware(
     const debugTool = findDebugTool(req);
     if (debugTool) {
       hasReported = true;
-      recordEvent({
+      record({
         event: 'metro debug',
         properties: getMetroDebugProperties(projectRoot, exp, debugTool),
       });

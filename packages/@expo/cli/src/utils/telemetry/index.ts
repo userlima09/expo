@@ -1,6 +1,7 @@
 import process from 'node:process';
 
 import type { Telemetry } from './Telemetry';
+import { commandEvent } from './events';
 import type { TelemetryRecord } from './types';
 import { env } from '../env';
 
@@ -25,26 +26,27 @@ export function getTelemetry(): Telemetry | null {
 }
 
 /**
- * Record a single, or multiple telemetry events.
+ * Record a single telemetry event, or multiple in a single batch.
  * The event does not need to be awaited, its:
  *   - Not sent when using `EXPO_NO_TELEMETRY` or `EXPO_OFFLINE`, and returns `null`
  *   - Sent immediately for long running commands, returns the `fetch` promise
  *   - Queued and sent in background, returns `undefined`
  */
-export function recordEvent(records: TelemetryRecord | TelemetryRecord[]) {
+export function record(records: TelemetryRecord | TelemetryRecord[]) {
   return getTelemetry()?.record(records);
 }
 
 /**
- * Record a single command being invoked.
- * This changes the telemetry strategy for long running commands.
+ * Record a command invocation, and the name of the command.
+ * This can be disabled with the $EXPO_NO_TELEMETRY environment variable.
+ * We do this to determine how well deprecations are going before remove a command.
  */
-export function recordCommandEvent(command: string) {
-  if (isLongRunningCommand(command.toLowerCase())) {
+export function recordCommand(command: string) {
+  if (isLongRunningCommand(command)) {
     getTelemetry()?.setStrategy('instant');
   }
 
-  return recordEvent({ event: 'action', properties: { command: `expo ${command}` } });
+  return record(commandEvent(command));
 }
 
 /** Determine if the command is a long-running command, based on the command name */

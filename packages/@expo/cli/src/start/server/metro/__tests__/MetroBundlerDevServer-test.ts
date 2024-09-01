@@ -1,7 +1,7 @@
 import { getConfig } from '@expo/config';
 import { vol } from 'memfs';
 
-import { recordEvent } from '../../../../utils/telemetry';
+import { record } from '../../../../utils/telemetry';
 import { BundlerStartOptions } from '../../BundlerDevServer';
 import { getPlatformBundlers } from '../../platformBundlers';
 import { MetroBundlerDevServer, getDeepLinkHandler } from '../MetroBundlerDevServer';
@@ -198,7 +198,7 @@ describe('onDeepLink', () => {
   it(`logs an event if runtime is custom`, async () => {
     const handler = getDeepLinkHandler('/');
     await handler({ runtime: 'custom', platform: 'ios' });
-    expect(recordEvent).toHaveBeenCalledWith({
+    expect(record).toHaveBeenCalledWith({
       event: 'dev client start command',
       properties: {
         status: 'started',
@@ -209,6 +209,6 @@ describe('onDeepLink', () => {
   it(`does not log an event if runtime is expo`, async () => {
     const handler = getDeepLinkHandler('/');
     await handler({ runtime: 'expo', platform: 'ios' });
-    expect(recordEvent).not.toHaveBeenCalled();
+    expect(record).not.toHaveBeenCalled();
   });
 });
