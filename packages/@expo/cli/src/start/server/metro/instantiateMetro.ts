@@ -21,7 +21,6 @@ import { createDebugMiddleware } from './debugging/createDebugMiddleware';
 import { runServer } from './runServer-fork';
 import { withMetroMultiPlatformAsync } from './withMetroMultiPlatform';
 import { Log } from '../../../log';
-import { createDebuggerTelemetryMiddleware } from '../../../utils/analytics/metroDebuggerMiddleware';
 import { env } from '../../../utils/env';
 import { CommandError } from '../../../utils/errors';
 import { createCorsMiddleware } from '../middleware/CorsMiddleware';
@@ -246,8 +245,6 @@ export async function instantiateMetroAsync(
       }
       return middleware.use(metroMiddleware);
     };
-
-    middleware.use(createDebuggerTelemetryMiddleware(projectRoot, exp));
 
     // Initialize all React Native debug features
     const { debugMiddleware, ...options } = createDebugMiddleware(metroBundler);

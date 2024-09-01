@@ -41,7 +41,6 @@ import { serializeHtmlWithAssets } from './serializeHtml';
 import { observeAnyFileChanges, observeFileChanges } from './waitForMetroToObserveTypeScriptFile';
 import { BundleAssetWithFileHashes, ExportAssetMap } from '../../../export/saveAssets';
 import { Log } from '../../../log';
-import getDevClientProperties from '../../../utils/analytics/getDevClientProperties';
 import { env } from '../../../utils/env';
 import { CommandError } from '../../../utils/errors';
 import { getFreePortAsync } from '../../../utils/port';
@@ -60,10 +59,7 @@ import { HistoryFallbackMiddleware } from '../middleware/HistoryFallbackMiddlewa
 import { InterstitialPageMiddleware } from '../middleware/InterstitialPageMiddleware';
 import { resolveMainModuleName } from '../middleware/ManifestMiddleware';
 import { ReactDevToolsPageMiddleware } from '../middleware/ReactDevToolsPageMiddleware';
-import {
-  DeepLinkHandler,
-  RuntimeRedirectMiddleware,
-} from '../middleware/RuntimeRedirectMiddleware';
+import { RuntimeRedirectMiddleware } from '../middleware/RuntimeRedirectMiddleware';
 import { ServeStaticMiddleware } from '../middleware/ServeStaticMiddleware';
 import {
   convertPathToModuleSpecifier,
