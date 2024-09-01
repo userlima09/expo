@@ -30,6 +30,10 @@ export class Telemetry {
     this.setStrategy(env.EXPO_NO_TELEMETRY_DETACH ? 'debug' : strategy);
   }
 
+  get strategy() {
+    return this.client.strategy;
+  }
+
   setStrategy(strategy: TelemetryOptions['strategy']) {
     // Abort when client is already using the correct strategy
     if (this.client.strategy === strategy) return;
