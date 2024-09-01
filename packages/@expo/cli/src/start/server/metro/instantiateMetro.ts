@@ -21,11 +21,9 @@ import { createDebugMiddleware } from './debugging/createDebugMiddleware';
 import { runServer } from './runServer-fork';
 import { withMetroMultiPlatformAsync } from './withMetroMultiPlatform';
 import { Log } from '../../../log';
-import { getMetroProperties } from '../../../utils/analytics/getMetroProperties';
 import { createDebuggerTelemetryMiddleware } from '../../../utils/analytics/metroDebuggerMiddleware';
 import { env } from '../../../utils/env';
 import { CommandError } from '../../../utils/errors';
-import { record } from '../../../utils/telemetry';
 import { createCorsMiddleware } from '../middleware/CorsMiddleware';
 import { createJsInspectorMiddleware } from '../middleware/inspector/createJsInspectorMiddleware';
 import { prependMiddleware, replaceMiddlewareWith } from '../middleware/mutations';
@@ -172,13 +170,6 @@ export async function loadMetroConfigAsync(
     isNamedRequiresEnabled: env.EXPO_USE_METRO_REQUIRE,
     getMetroBundler,
   });
-
-  if (process.env.NODE_ENV !== 'test') {
-    record({
-      event: 'metro config',
-      properties: getMetroProperties(projectRoot, exp, config),
-    });
-  }
 
   return {
     config,
