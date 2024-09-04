@@ -1,10 +1,23 @@
 import ExpoFileSystem from './ExpoFileSystem';
 import { Path } from './FileSystem.types';
+import { dirname, extname, join } from './pathNode';
 
 export class File extends ExpoFileSystem.FileSystemFile {
   constructor(path: Path) {
     super(path);
     this.validatePath();
+  }
+  /*
+   * Directory containing the file.
+   */
+  get parentDirectory() {
+    return new Directory(dirname(this.path));
+  }
+  /*
+   * File extension (with the dot).
+   */
+  get extension() {
+    return extname(this.path);
   }
 }
 
@@ -18,6 +31,12 @@ export class Directory extends ExpoFileSystem.FileSystemDirectory {
   constructor(path: Path) {
     super(path);
     this.validatePath();
+  }
+  /*
+   * Directory containing the file.
+   */
+  get parentDirectory() {
+    return new Directory(join(this.path, '..'));
   }
 }
 
