@@ -292,8 +292,10 @@ export async function test({ describe, expect, it, ...t }) {
         expect(file.parentDirectory.path).toBe(new Directory(testDirectory).path);
       });
       it('return parentDirectory for directories', () => {
-        const file = new File(testDirectory + '/testdirectory/sampleDir');
-        expect(file.parentDirectory.parentDirectory.path).toBe(new Directory(testDirectory).path);
+        const directory = new Directory(testDirectory + '/testdirectory/sampleDir');
+        expect(directory.parentDirectory.parentDirectory.path).toBe(
+          new Directory(testDirectory).path
+        );
       });
       it('return extension for files', () => {
         expect(new File(testDirectory + 'image.jpeg').extension).toBe('.jpeg');
@@ -301,7 +303,7 @@ export async function test({ describe, expect, it, ...t }) {
       });
 
       it('joins paths', () => {
-        expect(join('file://path', 'to', '..', 'file')).toBe('file://path/to/../file');
+        expect(join('file://path', 'to', '..', 'file')).toBe('file://path/file');
       });
     });
   });
