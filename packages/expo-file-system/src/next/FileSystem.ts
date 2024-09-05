@@ -1,6 +1,6 @@
 import ExpoFileSystem from './ExpoFileSystem';
 import { Path } from './FileSystem.types';
-import { dirname, extname, join } from './path';
+import { dirname, extname, join } from './pathUtilities/path';
 
 export class File extends ExpoFileSystem.FileSystemFile {
   constructor(path: Path) {
